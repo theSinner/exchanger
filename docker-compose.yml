@@ -1,0 +1,41 @@
+version: '3.7'
+
+services:
+  
+  api:
+    image: thesinner/exchanger:latest
+    container_name: exchanger
+    build:
+      context: ./.
+      dockerfile: Dockerfile
+    command: /code/run.sh
+    ports:
+      - target: 4567
+        published: 6600
+        protocol: tcp
+        mode: ingress
+    depends_on:
+      - redis
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+        condition: any
+
+  redis:
+    container_name: exchanger_redis
+    image: redis:5.0.5
+    command: redis-server
+    volumes:
+      - redis:/data
+    expose:
+      - 6379
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+
+volumes:
+  redis:
