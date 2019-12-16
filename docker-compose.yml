@@ -25,7 +25,7 @@ services:
         condition: any
 
   redis:
-    container_name: exchanger_redis
+    container_name: redis
     image: redis:5.0.5
     command: redis-server
     volumes:
