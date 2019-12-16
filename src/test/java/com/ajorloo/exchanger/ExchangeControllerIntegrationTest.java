@@ -54,7 +54,12 @@ public class ExchangeControllerIntegrationTest {
 			connection.setRequestMethod(method);
 			connection.setDoOutput(true);
 			connection.connect();
-			String body = IOUtils.toString(connection.getInputStream());
+			String body = "";
+			try {
+				body = IOUtils.toString(connection.getInputStream());
+			} catch (IOException getResponseException) {
+
+			}
 			return new TestResponse(connection.getResponseCode(), body);
 		} catch (IOException e) {
 			e.printStackTrace();
